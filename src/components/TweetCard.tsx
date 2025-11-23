@@ -143,6 +143,7 @@ export default function TweetCard(props: TweetCardProps) {
               {category === "ai" && "AI / Tech"}
               {category === "politics" && "Politics"}
               {category === "meme" && "Meme"}
+              {category === "sports" && "Sports"}
               {category === "other" && "Other"}
             </span>
           )}

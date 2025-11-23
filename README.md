@@ -224,6 +224,7 @@ batched call (when `OPENAI_API_KEY` is available):
 - `ai` – AI / tech / dev tools / startups.
 - `politics` – elections, geopolitics, policy.
 - `meme` – jokes / shitposts / culture.
+- `sports` – sports, teams, matches, leagues, athletes, scores, sports betting.
 - `other` – everything else.
 
 These are stored in the `arenas.category` column and surfaced in the UI as category pills and

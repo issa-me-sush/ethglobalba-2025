@@ -1,6 +1,6 @@
 import type { Config } from "../config";
 
-export type ArenaCategory = "ai" | "crypto" | "politics" | "meme" | "other";
+export type ArenaCategory = "ai" | "crypto" | "politics" | "meme" | "sports" | "other";
 
 interface ClassifyItem {
   id: string;
@@ -29,11 +29,12 @@ export async function classifyArenas(
   const systemPrompt =
     "You are classifying viral tweets into coarse buckets for a prediction market. " +
     "Return STRICT JSON only, no prose.\n" +
-    'Valid categories: "crypto", "ai", "politics", "meme", "other".\n' +
+    'Valid categories: "crypto", "ai", "politics", "meme", "sports", "other".\n' +
     "- crypto: anything clearly about coins, tokens, DeFi, NFTs, airdrops, Base, onchain, CT culture.\n" +
     "- ai: AI, LLMs, dev tools, startups, hardware, general tech topics.\n" +
     "- politics: elections, geopolitics, public policy, politicians, governments.\n" +
-    "- meme: mostly jokes / shitposts / culture, not clearly crypto/ai/politics.\n" +
+    "- meme: mostly jokes / shitposts / culture, not clearly crypto/ai/politics/sports.\n" +
+    "- sports: sports, teams, games, matches, leagues, athletes, scores, sports betting.\n" +
     "- other: everything else.\n" +
     "Respond with a JSON object: { \"labels\": [{ \"id\": \"arena-id\", \"category\": \"crypto\" }, ...] }.";
 

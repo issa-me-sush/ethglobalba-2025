@@ -2,7 +2,7 @@ export type ArenaStatus = "active" | "locked" | "resolved";
 
 export type ArenaOutcome = "yes" | "no" | null;
 
-export type ArenaCategory = "ai" | "crypto" | "politics" | "meme" | "other" | null;
+export type ArenaCategory = "ai" | "crypto" | "politics" | "meme" | "sports" | "other" | null;
 
 /**
  * Arena domain model (mirrors the DB schema at a high level).

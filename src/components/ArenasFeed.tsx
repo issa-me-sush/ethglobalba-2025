@@ -14,7 +14,7 @@ interface ArenasFeedProps {
   showHeading?: boolean;
 }
 
-type Filter = "all" | "crypto" | "ai" | "politics";
+type Filter = "all" | "crypto" | "ai" | "politics" | "sports";
 
 export default function ArenasFeed({ showHeading = true }: ArenasFeedProps) {
   const [arenas, setArenas] = useState<Arena[]>([]);
@@ -114,6 +114,17 @@ export default function ArenasFeed({ showHeading = true }: ArenasFeedProps) {
           onClick={() => setFilter("politics")}
         >
           Politics
+        </button>
+        <button
+          type="button"
+          className={`rounded-full border px-3 py-1 ${
+            filter === "sports"
+              ? "border-amber-500 bg-amber-500/10 text-amber-300"
+              : "border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-600"
+          }`}
+          onClick={() => setFilter("sports")}
+        >
+          Sports
         </button>
       </div>
 

@@ -12,22 +12,28 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@coinbase/cdp-core": "latest",
+    "@coinbase/cdp-hooks": "latest",
+    "@coinbase/cdp-react": "latest",
+    "@coinbase/cdp-sdk": "latest",
+    "@supabase/supabase-js": "latest",
+    "buffer": "^6.0.3",
+    "lucide-react": "^0.554.0",
     "next": "15.4.3",
     "react": "~19.1.0",
     "react-dom": "~19.1.0",
-    "@coinbase/cdp-react": "latest",
-    "@coinbase/cdp-hooks": "latest",
-    "@coinbase/cdp-core": "latest",
     "viem": "^2.8.6",
-    "buffer": "^6.0.3",
-    "@coinbase/cdp-sdk": "latest"
+    "x402-fetch": "latest"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "~19.1.8",
     "@types/react-dom": "~19.1.6",
+    "autoprefixer": "^10.4.20",
     "eslint": "^9.31.0",
     "eslint-config-next": "15.4.3",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.15",
     "typescript": "~5.8.3"
   }
 }

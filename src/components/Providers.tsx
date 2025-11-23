@@ -38,7 +38,7 @@ const CDP_CONFIG = {
   }),
   appName: "CDP Next.js StarterKit",
   appLogoUrl: "http://localhost:3000/logo.svg",
-  authMethods: ["email", "sms", "oauth:google", "oauth:apple"],
+  authMethods: ["email", "sms", "oauth:google", "oauth:x"],
 } as Config;
 
 /**

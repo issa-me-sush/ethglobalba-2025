@@ -14,14 +14,9 @@ export default function ClientApp() {
   const { isSignedIn } = useIsSignedIn();
 
   return (
-    <div className="app flex-col-container flex-grow">
+    <div className="flex min-h-screen flex-col">
       {!isInitialized && <Loading />}
-      {isInitialized && (
-        <>
-          {!isSignedIn && <SignInScreen />}
-          {isSignedIn && <SignedInScreen />}
-        </>
-      )}
+      {isInitialized && (!isSignedIn ? <SignInScreen /> : <SignedInScreen />)}
     </div>
   );
 }

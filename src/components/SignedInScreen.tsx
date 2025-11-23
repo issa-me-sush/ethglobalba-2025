@@ -15,6 +15,9 @@ import { baseSepolia, base } from "viem/chains";
 import EOATransaction from "./EOATransaction";
 import Header from "./Header";
 import UserBalance from "./UserBalance";
+import LinkXAccountButton from "./LinkXAccountButton";
+import ArenasFeed from "./ArenasFeed";
+import MyBets from "./MyBets";
 
 import FundWallet from "@/components/FundWallet";
 
@@ -70,6 +73,7 @@ const useEvmBalance = (
 export default function SignedInScreen() {
   const { isSignedIn } = useIsSignedIn();
   const { evmAddress } = useEvmAddress();
+  const [activeTab, setActiveTab] = useState<"arenas" | "my-bets">("arenas");
 
   const { formattedBalance, getBalance } = useEvmBalance(evmAddress, client, true);
   const { formattedBalance: formattedBalanceSepolia, getBalance: getBalanceSepolia } =
@@ -78,14 +82,53 @@ export default function SignedInScreen() {
   return (
     <>
       <Header />
-      <main className="main flex-col-container flex-grow">
-        <p className="page-heading">Fund your EVM wallet on Base</p>
-        <div className="main-inner flex-col-container">
-          <div className="card card--user-balance">
+      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-3 py-6 lg:flex-row">
+        <div className="flex min-w-0 flex-1 flex-col gap-6">
+          <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+            <button
+              type="button"
+              className={`rounded-full px-3 py-1 text-xs font-medium ${
+                activeTab === "arenas"
+                  ? "bg-slate-100 text-slate-900"
+                  : "bg-slate-900 text-slate-300 hover:bg-slate-800"
+              }`}
+              onClick={() => setActiveTab("arenas")}
+            >
+              Arenas
+            </button>
+            <button
+              type="button"
+              className={`rounded-full px-3 py-1 text-xs font-medium ${
+                activeTab === "my-bets"
+                  ? "bg-slate-100 text-slate-900"
+                  : "bg-slate-900 text-slate-300 hover:bg-slate-800"
+              }`}
+              onClick={() => setActiveTab("my-bets")}
+            >
+              My bets
+            </button>
+          </div>
+          {activeTab === "arenas" && <ArenasFeed showHeading />}
+          {activeTab === "my-bets" && <MyBets />}
+        </div>
+        <aside className="mt-4 flex w-full max-w-sm flex-col gap-4 lg:mt-0 lg:w-80">
+          <div className="card">
+            <h2 className="card-title">Optional: link your X account</h2>
+            <p className="mb-4 text-sm text-slate-300">
+              Use your X login as an additional way to access this wallet.
+            </p>
+            <LinkXAccountButton />
+          </div>
+          <div className="card">
+            <h2 className="card-title">Base mainnet balance</h2>
             <UserBalance balance={formattedBalance} />
           </div>
-          <div className="card card--transaction">
-            {isSignedIn && (
+          <div className="card">
+            <h2 className="card-title">Fund your wallet on Base</h2>
+            <p className="mb-4 text-sm text-slate-300">
+              Use onramp to top up your EVM wallet with real or mock funds.
+            </p>
+            {isSignedIn && evmAddress && (
               <FundWallet
                 onSuccess={getBalance}
                 network="base"
@@ -94,23 +137,24 @@ export default function SignedInScreen() {
               />
             )}
           </div>
-        </div>
-        <hr className="page-divider" />
-        <p className="page-heading">Send an EVM transaction on Base Sepolia</p>
-        <div className="main-inner flex-col-container">
-          <div className="card card--user-balance">
+          <div className="card">
+            <h2 className="card-title">Base Sepolia testnet</h2>
             <UserBalance
               balance={formattedBalanceSepolia}
               faucetName="Base Sepolia Faucet"
               faucetUrl="https://portal.cdp.coinbase.com/products/faucet"
             />
           </div>
-          <div className="card card--transaction">
+          <div className="card">
+            <h2 className="card-title">Send a test transaction</h2>
+            <p className="mb-4 text-sm text-slate-300">
+              Try a small self-transfer on Base Sepolia to verify everything is wired correctly.
+            </p>
             {isSignedIn && (
               <EOATransaction balance={formattedBalanceSepolia} onSuccess={getBalanceSepolia} />
             )}
           </div>
-        </div>
+        </aside>
       </main>
     </>
   );

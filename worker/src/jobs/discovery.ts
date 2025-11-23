@@ -1,6 +1,7 @@
 import type { Config } from "../config";
 import type { Db } from "../supabase";
 import { searchCandidateTweets } from "../twitter";
+import { classifyArenas, type ArenaCategory } from "./labeling";
 
 const MIN_AGE_MINUTES = 2;
 const MAX_AGE_MINUTES = 240; // 4h
@@ -140,10 +141,12 @@ export async function runDiscoveryTick(config: Config, db: Db) {
 
   if (scored.length === 0) return;
 
+  // First, figure out which scored tweets don't already have arenas.
+  const toInsert: { tweet: (typeof scored)[number]["tweet"]; score: number }[] = [];
+
   for (const { tweet, score } of scored) {
     const tweetId = tweet.id;
 
-    // Skip if arena already exists for this tweet_id
     const { data: existing, error: existingError } = await db
       .from("arenas")
       .select("id")
@@ -161,6 +164,30 @@ export async function runDiscoveryTick(config: Config, db: Db) {
       continue;
     }
 
+    toInsert.push({ tweet, score });
+  }
+
+  if (toInsert.length === 0) return;
+
+  // Label new arenas using OpenAI (batched).
+  let labelsByTweetId: Record<string, ArenaCategory> = {};
+  try {
+    const labelItems = toInsert
+      .filter(item => item.tweet.text && item.tweet.text.trim().length)
+      .map(item => ({
+        id: item.tweet.id,
+        handle: item.tweet.author?.username ?? "unknown",
+        text: item.tweet.text ?? "",
+      }));
+
+    labelsByTweetId = await classifyArenas(config, labelItems);
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error("[discovery] classifyArenas failed", e);
+  }
+
+  for (const { tweet, score } of toInsert) {
+    const tweetId = tweet.id;
     const likes0 = tweet.likeCount;
     const bangerLine = computeBangerLine(likes0, config.appMode);
     const scoreLine = computeScoreLine(score);
@@ -187,7 +214,9 @@ export async function runDiscoveryTick(config: Config, db: Db) {
         betCutoffCandidate < resolveMinusOneHour ? betCutoffCandidate : resolveMinusOneHour;
     }
 
-    const row: ArenaRowInsert = {
+    const category = labelsByTweetId[tweetId] ?? null;
+
+    const row: ArenaRowInsert & { category?: ArenaCategory | null } = {
       tweet_id: tweetId,
       tweet_url: tweet.url ?? `https://x.com/${tweet.author?.username}/status/${tweet.id}`,
       tweet_author_handle: tweet.author?.username ?? "unknown",
@@ -206,6 +235,7 @@ export async function runDiscoveryTick(config: Config, db: Db) {
       score_0: score,
       score_line: scoreLine ?? undefined,
       status: "active",
+      ...(category && { category }),
     };
 
     const { error: insertError } = await db.from("arenas").insert(row);
@@ -221,6 +251,8 @@ export async function runDiscoveryTick(config: Config, db: Db) {
         likes0,
         "banger_line",
         bangerLine,
+        "category",
+        category ?? "unlabeled",
       );
     }
   }

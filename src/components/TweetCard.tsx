@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 
-import type { ArenaStatus } from "@/lib/arenas/types";
+import type { ArenaCategory, ArenaStatus } from "@/lib/arenas/types";
 import { IconExternalLink, IconLike, IconReply, IconRetweet, IconViews } from "./Icons";
 
 interface TweetCardProps {
@@ -18,6 +18,7 @@ interface TweetCardProps {
   bangerLine?: number;
   scoreLine?: number | null;
   status?: ArenaStatus;
+  category?: ArenaCategory | null;
   href?: string;
   children?: ReactNode;
 }
@@ -58,6 +59,7 @@ export default function TweetCard(props: TweetCardProps) {
     bangerLine,
     scoreLine,
     status,
+    category,
     href,
     children,
   } = props;
@@ -133,6 +135,15 @@ export default function TweetCard(props: TweetCardProps) {
           {status && (
             <span className="inline-flex items-center gap-1 rounded-full border border-slate-700 px-2 py-0.5 text-[11px] uppercase tracking-[0.16em] text-slate-400">
               {status}
+            </span>
+          )}
+          {category && (
+            <span className="inline-flex items-center gap-1 rounded-full border border-slate-800 bg-slate-900/80 px-2 py-0.5 text-[11px] font-medium text-slate-300">
+              {category === "crypto" && "CT"}
+              {category === "ai" && "AI / Tech"}
+              {category === "politics" && "Politics"}
+              {category === "meme" && "Meme"}
+              {category === "other" && "Other"}
             </span>
           )}
           {tweetUrl && (

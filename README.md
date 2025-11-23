@@ -217,6 +217,18 @@ const score = computeBangerScore({
 
 The top N (20) tweets by this score become arenas if they don’t already exist in DB.
 
+During discovery, new arenas are also classified into coarse categories using an LLM in a single
+batched call (when `OPENAI_API_KEY` is available):
+
+- `crypto` – CT, onchain, DeFi, NFTs, airdrops, Base, etc.
+- `ai` – AI / tech / dev tools / startups.
+- `politics` – elections, geopolitics, policy.
+- `meme` – jokes / shitposts / culture.
+- `other` – everything else.
+
+These are stored in the `arenas.category` column and surfaced in the UI as category pills and
+filters in the feed.
+
 ### 5.2 Banger line & score line (different thresholds per mode)
 
 At discovery time we store both:

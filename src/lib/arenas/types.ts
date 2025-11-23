@@ -32,6 +32,7 @@ export interface Arena {
   status: ArenaStatus;
   outcome: ArenaOutcome;
   category: ArenaCategory;
+  firstDemoBetAt?: string | null;
 }
 
 

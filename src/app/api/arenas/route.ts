@@ -8,7 +8,7 @@ export async function GET() {
     const { data, error } = await supabaseServer
       .from("arenas")
       .select(
-        "id, arena_index, tweet_id, tweet_url, tweet_author_handle, tweet_text, author_display_name, tweet_created_at, arena_created_at, resolve_deadline, bet_cutoff_at, likes_0, retweets_0, replies_0, views_0, quotes_0, score_0, score_line, banger_line, status, outcome, category",
+        "id, arena_index, tweet_id, tweet_url, tweet_author_handle, tweet_text, author_display_name, tweet_created_at, arena_created_at, resolve_deadline, bet_cutoff_at, likes_0, retweets_0, replies_0, views_0, quotes_0, score_0, score_line, banger_line, status, outcome, category, first_demo_bet_at",
       )
       .order("arena_created_at", { ascending: false })
       .limit(50);
@@ -43,6 +43,7 @@ export async function GET() {
         status: row.status,
         outcome: row.outcome,
         category: row.category,
+        firstDemoBetAt: row.first_demo_bet_at ?? null,
       })) ?? [];
 
     // eslint-disable-next-line no-console

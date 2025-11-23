@@ -14,6 +14,7 @@ import {
 import { ERC20_ABI } from "@/lib/erc20";
 
 interface ArenaBetPanelProps {
+  arenaId: string;
   arenaIndex: number;
   likes0?: number;
   bangerLine?: number;
@@ -21,7 +22,12 @@ interface ArenaBetPanelProps {
 
 const BASE_SEPOLIA_CHAIN_ID = 84532n;
 
-export default function ArenaBetPanel({ arenaIndex, likes0, bangerLine }: ArenaBetPanelProps) {
+export default function ArenaBetPanel({
+  arenaId,
+  arenaIndex,
+  likes0,
+  bangerLine,
+}: ArenaBetPanelProps) {
   const { isSignedIn } = useIsSignedIn();
   const { evmAddress } = useEvmAddress();
   const { sendEvmTransaction } = useSendEvmTransaction();
@@ -159,7 +165,7 @@ export default function ArenaBetPanel({ arenaIndex, likes0, bangerLine }: ArenaB
 
         // Inform backend that this arena now has at least one on-chain bet.
         try {
-          await fetch(`/api/arenas/${arenaIndex}/first-bet`, { method: "POST" });
+          await fetch(`/api/arenas/${arenaId}/first-bet`, { method: "POST" });
         } catch (apiError) {
           // eslint-disable-next-line no-console
           console.error("[ArenaBetPanel] failed to mark first bet in Supabase", apiError);
@@ -172,7 +178,7 @@ export default function ArenaBetPanel({ arenaIndex, likes0, bangerLine }: ArenaB
         setFlag(false);
       }
     },
-    [arenaIndex, parsedAmount, requireAccount, sendEvmTransaction, evmAddress],
+    [arenaId, arenaIndex, parsedAmount, requireAccount, sendEvmTransaction, evmAddress],
   );
 
   const handleClaim = useCallback(async () => {

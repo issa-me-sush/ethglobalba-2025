@@ -143,7 +143,7 @@ export default function ArenasFeed({ showHeading = true }: ArenasFeedProps) {
             views0={arena.views0}
             bangerLine={arena.bangerLine}
             scoreLine={arena.scoreLine}
-            status={arena.status}
+            status={arena.firstDemoBetAt ? arena.status : undefined}
             category={arena.category}
             href={`/arenas/${arena.id}`}
           />

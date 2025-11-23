@@ -65,6 +65,8 @@ export default function ArenaDetail({ arenaId }: ArenaDetailProps) {
   const tweetCreatedAt = new Date(arena.tweetCreatedAt);
   const resolveDeadline = new Date(arena.resolveDeadline);
   const betCutoffAt = new Date(arena.betCutoffAt);
+  const hasFirstBet = Boolean(arena.firstDemoBetAt);
+  const displayStatusLabel = hasFirstBet ? arena.status.toUpperCase() : "NO BETS YET";
 
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-3 py-6">
@@ -101,7 +103,7 @@ export default function ArenaDetail({ arenaId }: ArenaDetailProps) {
             views0={arena.views0}
             bangerLine={arena.bangerLine}
             scoreLine={arena.scoreLine}
-            status={arena.status}
+            status={hasFirstBet ? arena.status : undefined}
           />
         </div>
 
@@ -111,9 +113,7 @@ export default function ArenaDetail({ arenaId }: ArenaDetailProps) {
           <div className="grid gap-3 text-sm text-slate-300 sm:grid-cols-2">
             <div>
               <p className="text-[11px] uppercase tracking-[0.16em] text-slate-500">Status</p>
-              <p className="mt-1 text-sm font-medium text-slate-100">
-                {arena.status.toUpperCase()}
-              </p>
+              <p className="mt-1 text-sm font-medium text-slate-100">{displayStatusLabel}</p>
             </div>
             <div>
               <p className="text-[11px] uppercase tracking-[0.16em] text-slate-500">Banger line</p>
@@ -187,6 +187,7 @@ export default function ArenaDetail({ arenaId }: ArenaDetailProps) {
 
         {/* Tile 4: Bet / position */}
         <ArenaBetPanel
+          arenaId={arena.id}
           arenaIndex={arena.arenaIndex}
           likes0={arena.likes0}
           bangerLine={arena.bangerLine}

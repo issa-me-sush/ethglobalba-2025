@@ -10,7 +10,7 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
     const { data, error } = await supabaseServer
       .from("arenas")
       .select(
-        "id, arena_index, tweet_id, tweet_url, tweet_author_handle, tweet_text, author_display_name, tweet_created_at, arena_created_at, resolve_deadline, bet_cutoff_at, likes_0, retweets_0, replies_0, views_0, quotes_0, score_0, score_line, banger_line, status, outcome, category",
+        "id, arena_index, tweet_id, tweet_url, tweet_author_handle, tweet_text, author_display_name, tweet_created_at, arena_created_at, resolve_deadline, bet_cutoff_at, likes_0, retweets_0, replies_0, views_0, quotes_0, score_0, score_line, banger_line, status, outcome, category, first_demo_bet_at",
       )
       .eq("id", id)
       .maybeSingle();
@@ -48,6 +48,7 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
       status: data.status,
       outcome: data.outcome,
       category: data.category,
+      firstDemoBetAt: data.first_demo_bet_at ?? null,
     };
 
     // eslint-disable-next-line no-console

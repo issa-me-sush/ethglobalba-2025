@@ -20,7 +20,7 @@ interface ArenaBetPanelProps {
   bangerLine?: number;
 }
 
-const BASE_SEPOLIA_CHAIN_ID = 84532n;
+const BASE_SEPOLIA_CHAIN_ID = 84532;
 
 export default function ArenaBetPanel({
   arenaId,
@@ -95,13 +95,13 @@ export default function ArenaBetPanel({
     void loadStake();
   }, [arenaIndex, evmAddress]);
 
-  const requireAccount = () => {
+  const requireAccount = useCallback(() => {
     if (!isSignedIn || !evmAddress) {
       setMessage("Connect your embedded wallet to place a bet.");
       return false;
     }
     return true;
-  };
+  }, [evmAddress, isSignedIn]);
 
   const placeBet = useCallback(
     async (yesSide: boolean) => {

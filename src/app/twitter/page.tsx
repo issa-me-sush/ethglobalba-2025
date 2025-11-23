@@ -1,18 +1,18 @@
-"use client";
-
-import { useSearchParams } from "next/navigation";
-
 const DEFAULT_PLAYER_URL =
   process.env.NEXT_PUBLIC_TWITTER_PLAYER_URL ?? "https://bangerarena.fun";
 
+type TwitterPageProps = {
+  searchParams?: Promise<{ url?: string }>;
+};
+
 /**
  * Lightweight /twitter route intended to be embedded as a Twitter "player" card.
- * It simply renders an iframe pointing at the given ?url=... (or bangerarena.fun by default)
- * and relies on the global app layout for <head> / metadata configuration.
+ * Async server component using the app router's searchParams prop, so it can be safely
+ * prerendered/exported and used as a Twitter card player URL.
  */
-export default function TwitterPlayerPage() {
-  const searchParams = useSearchParams();
-  const url = searchParams.get("url") || DEFAULT_PLAYER_URL;
+export default async function TwitterPlayerPage({ searchParams }: TwitterPageProps) {
+  const resolved = (await searchParams) ?? {};
+  const url = resolved.url || DEFAULT_PLAYER_URL;
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-slate-950 text-slate-100">
